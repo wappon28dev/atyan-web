@@ -8,3 +8,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// TODO: FIXME: これはサンプルモデル.  あとで消す.
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
