@@ -1,0 +1,34 @@
+name: Check
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - prod
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔨 Prepare Bun environment
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 🎉 Install project dependencies
+        run: bun i
+
+      - name: 🔏 Decrypt .env
+        run: bun dotenvx decrypt
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+
+      - name: 😺 Check
+        run: bun check

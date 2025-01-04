@@ -1,0 +1,16 @@
+---
+import { Expanded } from "@/components/_panda/cva/Expanded";
+import { VStack } from "panda/jsx";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { styled as p } from "panda/jsx";
+import { Icon } from "astro-icon/components";
+---
+
+<BaseLayout>
+  <Expanded items="center">
+    <VStack gap="0">
+      <Icon name="me" size="15em" />
+      <p.p>こうじちゅう…</p.p>
+    </VStack>
+  </Expanded>
+</BaseLayout>

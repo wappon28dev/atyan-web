@@ -1,0 +1,37 @@
+{
+  "name": "atyan-web-api",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "scripts": {
+    "gen:dev-vars": "bun dotenvx decrypt --stdout >.dev.vars",
+    "dev": "wrangler dev --port 8787 ./src/index.ts",
+    "clean": "bunx rimraf ./node_modules ./.wrangler",
+    "check": "bun tsc -b && bun typo && eslint ./src",
+    "lint": "eslint ./src",
+    "typo": "cspell \"./src/**\" --gitignore",
+    "db:create:migration": "bun wrangler d1 migrations create atyan-web-db",
+    "db:gen:migration": "prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output",
+    "db:apply:migration": "bun wrangler d1 migrations apply atyan-web-db --local",
+    "db:gen:client": "bun prisma generate"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.4.2",
+    "@prisma/adapter-d1": "^6.1.0",
+    "@prisma/client": "^6.1.0",
+    "envsafe": "^2.0.3",
+    "hono": "^4.6.15",
+    "neverthrow": "^8.1.1",
+    "ts-pattern": "^5.6.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.12.1",
+    "@cloudflare/workers-types": "^4.20241230.0",
+    "@tsconfig/strictest": "^2.0.5",
+    "cspell": "^8.17.1",
+    "eslint-plugin-format": "^0.1.3",
+    "husky": "^9.1.7",
+    "prisma": "^6.1.0",
+    "wrangler": "3.99.0"
+  }
+}

@@ -1,0 +1,73 @@
+name: Build and Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+      - prod
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔨 Prepare Bun environment
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 🎉 Install project dependencies
+        run: bun i
+
+      - name: 🔏 Decrypt .env
+        run: bun dotenvx decrypt
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+
+      - name: 😺 Check
+        run: bun check
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    environment:
+      name: ${{ (github.ref == 'refs/heads/prod' && 'production') || 'preview' }}
+    env:
+      PUBLIC_MODE: ${{ (github.ref == 'refs/heads/prod' && 'production') || 'preview' }}
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔨 Prepare Bun environment
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 🎉 Install project dependencies
+        run: bun i
+
+      - name: 🔏 Decrypt .env
+        run: bun dotenvx decrypt
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+
+      - name: 🏗️ Generate static files
+        run: bun run build
+
+      - name: 🚀 Deploy to Cloudflare Pages
+        id: cloudflare_pages_deploy
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: "pages deploy . --branch ${{ github.ref_name }}"
+          workingDirectory: ./dist
+        env:
+          NODE_VERSION: 22

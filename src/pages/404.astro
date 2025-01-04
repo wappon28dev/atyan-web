@@ -1,0 +1,30 @@
+---
+import { Expanded } from "@/components/_panda/cva/Expanded";
+import { styled as p } from "panda/jsx";
+import { VStack } from "panda/jsx";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import { Button } from "@/components/_panda/cva/Button";
+import { HStack } from "panda/jsx";
+---
+
+<BaseLayout>
+  <Expanded items="center">
+    <VStack>
+      <p.div position="relative">
+        <p.div position="absolute" top="0" right="-3" transform="rotate(30deg)">
+          <Icon name="material-symbols:question-mark" size="1.5rem" />
+        </p.div>
+      </p.div>
+      <p.p>お探しのページは見つかりませんでした。</p.p>
+      <p.a href="/">
+        <Button>
+          <HStack>
+            <p.p>トップページへ</p.p>
+            <Icon name="material-symbols:arrow-outward" />
+          </HStack>
+        </Button>
+      </p.a>
+    </VStack>
+  </Expanded>
+</BaseLayout>

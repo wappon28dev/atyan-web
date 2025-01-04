@@ -1,0 +1,84 @@
+---
+import { cvaExpanded, Expanded } from "@/components/_panda/cva/Expanded";
+import { SEO } from "astro-seo";
+import { styled as p } from "panda/jsx";
+import { INFO } from "@/lib/consts";
+import { ENV, mode } from "@/lib/services/env";
+import { version } from "package";
+import { StyledToast } from "@/components/Toast";
+
+import "@/styles/global.css";
+import "@/styles/fonts.css";
+
+import "@fontsource/m-plus-rounded-1c/400.css";
+import "@fontsource/m-plus-rounded-1c/700.css";
+import "@fontsource/m-plus-rounded-1c/900.css";
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width" name="viewport" />
+    <meta content="{Astro.generator}" name="generator" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <SEO title={INFO.name.ja} />
+    <title>{INFO.name.ja}</title>
+
+    {
+      ENV.PUBLIC_MODE === "production" && (
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3BR0PBY94V" type="text/partytown" is:inline />
+      )
+    }
+    <script type="text/partytown" is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-3BR0PBY94V");
+    </script>
+
+    <script is:inline define:vars={{ INFO }}>
+      const applyTheme = () => {
+        const isDarkInit = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = localStorage.getItem(`${INFO.id}.prefer-theme`);
+        const htmlElem = document.documentElement;
+
+        if (theme == null) {
+          if (isDarkInit) {
+            htmlElem.dataset.colorMode = "dark";
+          }
+        } else {
+          if (theme === "dark") {
+            htmlElem.dataset.colorMode = "dark";
+          } else {
+            delete htmlElem.dataset.data.colorMode;
+          }
+        }
+      };
+
+      applyTheme();
+      document.addEventListener("astro:after-swap", applyTheme);
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+    </script>
+  </head>
+
+  <Expanded
+    basedOn="screen"
+    display="grid"
+    gridTemplateColumns="100%"
+    gridTemplateRows="auto 1fr auto"
+    h="unset"
+    minH={["100dvh", "100vh"]}
+  >
+    <p.header />
+    <p.main className={cvaExpanded()}>
+      <slot />
+    </p.main>
+    <p.footer />
+    <p.code fontSize="x-small" cursor="pointer" userSelect="all" position="absolute" right="0" bottom="0" p="3"
+      >{mode[ENV.PUBLIC_MODE]}-v{version}</p.code
+    >
+    <StyledToast client:only="react" />
+  </Expanded>
+</html>

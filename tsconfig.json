@@ -1,0 +1,25 @@
+{
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "~/*": ["./public/*"],
+      "panda/*": ["./panda/*"],
+      "package": ["./package.json"]
+    },
+    "outDir": "dist",
+    "skipLibCheck": true
+  },
+  "references": [
+    { "path": "./api" }
+  ],
+  "include": [
+    "src/",
+    "panda/",
+    "panda.config.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
