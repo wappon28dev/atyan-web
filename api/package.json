@@ -4,7 +4,8 @@
   "main": "src/index.ts",
   "scripts": {
     "gen:dev-vars": "bun dotenvx decrypt --stdout >.dev.vars",
-    "dev": "wrangler dev --port 8787 ./src/index.ts",
+    "dev": "bun gen:dev-vars && wrangler dev --port 8787 ./src/index.ts",
+    "prepare": "bun db:gen:client",
     "clean": "bunx rimraf ./node_modules ./.wrangler",
     "check": "bun tsc -b && bun typo && eslint ./src",
     "lint": "eslint ./src",

@@ -58,6 +58,12 @@ jobs:
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 
+      # TODO: API に env が増えたらコメントアウトを外す
+      # - name: 🔏 Generate .dev.vars
+      #   run: bun api gen:dev-vars
+      #   env:
+      #     DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY_API }}
+
       - name: 🏗️ Generate static files
         run: bun run build
 

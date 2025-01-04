@@ -11,9 +11,11 @@
     "antfu",
     "astro",
     "atyan",
+    "autoincrement",
     "cloudflare",
     "consts",
     "datamodel",
+    "datasource",
     "DOTENV",
     "dotenvx",
     "ellipsed",
@@ -38,7 +40,9 @@
     "palt",
     "pandacss",
     "partytown",
+    "prisma",
     "rgba",
-    "setlocale"
+    "setlocale",
+    "sqlite"
   ]
 }
